@@ -1,12 +1,31 @@
-import { Toaster } from "@/components/ui/toaster";
-import { LoginForm } from "./components/LoginForm";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
+import { AuthProvider } from "./context/AuthContext";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Welcome from "./pages/Welcome";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
-    <main className="min-h-screen flex items-center justify-center p-4 bg-gray-50 dark:bg-gray-900">
-      <LoginForm />
-      <Toaster />
-    </main>
+    <BrowserRouter>
+      <AuthProvider>
+        <Toaster position="top-center" />
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route 
+            path="/welcome" 
+            element={
+              <ProtectedRoute>
+                <Welcome />
+              </ProtectedRoute>
+            } 
+          />
+          <Route path="/" element={<Navigate to="/login" replace />} />
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 
